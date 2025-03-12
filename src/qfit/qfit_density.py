@@ -25,7 +25,9 @@ def parse_args():
     p.add_argument(
         "-em", "--em", type=bool, default=False, help="Calculate EM map or not."
     )
-
+    p.add_argument(
+        "-l", "--label", type=str, default=None, help="Which label to use for computing X-ray map"
+    )
     args = p.parse_args()
 
     if args.output is None:
@@ -41,7 +43,7 @@ def main():
     if os.path.splitext(args.xmap)[1] != ".mtz":
         xmap = XMap.fromfile(args.xmap, resolution=args.resolution)
     else:
-        xmap = XMap.fromfile(args.xmap)
+        xmap = XMap.fromfile(args.xmap) if args.label is None else XMap.fromfile(args.xmap, label=args.label)
 
     resolution = args.resolution
     out = XMap.zeros_like(xmap)
